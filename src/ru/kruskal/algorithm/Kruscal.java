@@ -38,10 +38,12 @@ public class Kruscal {
         return true;
     }
     public void kr(){
-        gr.sortGr(); //сортируем ребра
+        gr.sorting(); //сортируем ребра
+
+        //Edge [] edges;
 
         int sum =0;
-        for (Edge e : edges){
+        for (Edge e : gr.edges){
             if (this.union(e.v1, e.v2))
                 sum+=e.weight;
         }
