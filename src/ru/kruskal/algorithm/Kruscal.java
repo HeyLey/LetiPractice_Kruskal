@@ -14,6 +14,7 @@ public class Kruscal {
     int[] rnk; //ранг
     List<Edge> mst;
     Graph gr; //исходный граф
+    Graph ans; //минимальное остовное дерево
 
     Kruscal(int size){
         set = new int [size];
@@ -49,7 +50,10 @@ public class Kruscal {
 
         for (Edge e : gr.edges){
             if (this.union(e.v1, e.v2))
+            {
                 sum+=e.weight;
+                ans.edges.add(e);
+            }
         }
 
 
