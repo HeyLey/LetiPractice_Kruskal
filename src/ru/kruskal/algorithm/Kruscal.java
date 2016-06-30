@@ -2,6 +2,8 @@ package ru.kruskal.algorithm;
 
 import ru.kruskal.model.Edge;
 import ru.kruskal.model.Graph;
+import ru.kruskal.model.Vertex;
+
 import java.util.List;
 
 /**
@@ -25,24 +27,26 @@ public class Kruscal {
         return x == set[x] ? x : (set[x] = set(set[x]));
     }
 
-    boolean union(int u, int v){
-        if ( (u=set(u)) == (v=set(v)) )
+    boolean union(Vertex u, Vertex v){
+        if ( (u.v=set(u.v)) == (v.v=set(v.v)) )
             return false;
-        if (rnk[u] < rnk[v])
-            set[u] = v;
+        if (rnk[u.v] < rnk[v.v])
+            set[u.v] = v.v;
         else{
-            set[v]=u;
-            if (rnk[u]==rnk[v])
-                rnk[u]++;
+            set[v.v]=u.v;
+            if (rnk[u.v]==rnk[v.v])
+                rnk[u.v]++;
         }
         return true;
     }
+
     public void kr(){
         gr.sorting(); //сортируем ребра
 
         //Edge [] edges;
 
         int sum =0;
+
         for (Edge e : gr.edges){
             if (this.union(e.v1, e.v2))
                 sum+=e.weight;

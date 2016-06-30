@@ -4,9 +4,9 @@ package ru.kruskal.model;
  * @author LeylaH
  */
 public class Edge implements Comparable<Edge> {
-    Vertex v1;
-    Vertex v2;
-    int weight;
+    public Vertex v1;
+    public Vertex v2;
+    public int weight;
 
     Edge(Vertex v1, Vertex v2, int weight) {
         this.v1 = v1;
