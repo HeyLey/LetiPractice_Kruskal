@@ -119,24 +119,18 @@ public class MainPanel extends JPanel {
         }
         return panel;
     }
-    private JPanel fromFile() {
-        try(FileReader reader = new FileReader("C:\\SomeDir\\notes3.txt"))
+    private JPanel fromFile() throws IOException {
+
+        FileInputStream input = new FileInputStream("C:\\SomeDir\\notes3.txt");
+        while(input.available()>0)
         {
             // читаем посимвольно
-            int c;
-            while((c=reader.read())!=-1){
-
-                System.out.print((char)c);
-                Edge e;
-                e.v1=c;
-                
-                graph.edges.add(e);
-            }
+            Edge e;
+            e.v1.v=input.read();
+            e.v2.v=input.read();
+            e.weight=input.read();
         }
-        catch(IOException ex){
 
-            System.out.println(ex.getMessage());
-        }
 
     }
 }
