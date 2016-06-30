@@ -1,7 +1,7 @@
 package ru.kruskal.ui;
-
+import java.io.*;
 import ru.kruskal.model.Graph;
-
+import ru.kruskal.model.Edge;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -118,5 +118,25 @@ public class MainPanel extends JPanel {
             }
         }
         return panel;
+    }
+    private JPanel fromFile() {
+        try(FileReader reader = new FileReader("C:\\SomeDir\\notes3.txt"))
+        {
+            // читаем посимвольно
+            int c;
+            while((c=reader.read())!=-1){
+
+                System.out.print((char)c);
+                Edge e;
+                e.v1=c;
+                
+                graph.edges.add(e);
+            }
+        }
+        catch(IOException ex){
+
+            System.out.println(ex.getMessage());
+        }
+
     }
 }
