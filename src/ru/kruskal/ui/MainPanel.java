@@ -1,7 +1,9 @@
 package ru.kruskal.ui;
+
 import java.io.*;
+
 import ru.kruskal.model.Graph;
-import ru.kruskal.model.Edge;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -30,27 +32,78 @@ public class MainPanel extends JPanel {
         grid.add(new JLabel("# edges (max 30)"));
 
 
-        JButton nextButton = createNextButton();
-
-        nextButton.setAction(new AbstractAction("Next") {
+        JPanel next = new JPanel(new FlowLayout());
+        add(next, BorderLayout.SOUTH);
+        JButton nextButton = new JButton(new AbstractAction("Next") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 submit1(vertexField, edgesField);
             }
         });
+        next.add(nextButton);
+        JButton makeRandom = new JButton(new AbstractAction("Random") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                makeRandom(vertexField, edgesField);
+            }
+        });
+        next.add(makeRandom);
 
         return panel;
     }
 
-    private JButton createNextButton() {
-        JButton nextButton = new JButton("Next");
+    private void makeRandom(JTextField vertexField, JTextField edgesField) {
+        if (!makeGraph(vertexField, edgesField)) {
+            return;
+        }
+        removeAll();
+
+        makeVisualization();
+
+    }
+
+    private void makeVisualization() {
+        add(new VisualizationPanel(graph));
+        JButton nextButton = new JButton(new AbstractAction("Next") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
         JPanel next = new JPanel(new FlowLayout());
         next.add(nextButton);
         add(next, BorderLayout.SOUTH);
-        return nextButton;
+        doPack();
+        repaint();
     }
 
     private void submit1(JTextField vertexField, JTextField edgesField) {
+        if (!makeGraph(vertexField, edgesField)) {
+            return;
+        }
+        removeAll();
+
+        add(createEdgesPanel());
+
+        JButton nextButton = new JButton(new AbstractAction("Next") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        JPanel next = new JPanel(new FlowLayout());
+        next.add(nextButton);
+        add(next, BorderLayout.SOUTH);
+
+        doPack();
+    }
+
+    private void doPack() {
+        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        topFrame.pack();
+    }
+
+    private boolean makeGraph(JTextField vertexField, JTextField edgesField) {
         int vertexNumber;
         try {
             vertexNumber = Integer.parseInt(vertexField.getText());
@@ -59,14 +112,14 @@ public class MainPanel extends JPanel {
                     "Vertex number must be an integer.",
                     "Format error",
                     JOptionPane.ERROR_MESSAGE);
-            return;
+            return false;
         }
         if (vertexNumber > 10 || vertexNumber <= 0) {
             JOptionPane.showMessageDialog(this,
                     "Vertex number must be > 0 and <= 10.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-            return;
+            return false;
         }
         int edgesNumber;
         try {
@@ -76,34 +129,17 @@ public class MainPanel extends JPanel {
                     "Edges number must be an integer.",
                     "Format error",
                     JOptionPane.ERROR_MESSAGE);
-            return;
+            return false;
         }
         if (edgesNumber > 30 || edgesNumber <= 0) {
             JOptionPane.showMessageDialog(this,
                     "Edges number must be > 0 and <= 10.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-            return;
+            return false;
         }
         graph = new Graph(vertexNumber, edgesNumber);
-        removeAll();
-
-        add(createEdgesPanel());
-
-        JButton nextButton = createNextButton();
-
-        nextButton.setAction(new AbstractAction("Next") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        topFrame.pack();
-
-        repaint();
+        return true;
     }
 
     private JPanel createEdgesPanel() {
@@ -119,18 +155,18 @@ public class MainPanel extends JPanel {
         }
         return panel;
     }
-    private JPanel fromFile() throws IOException {
 
+    private JPanel fromFile() throws IOException {
         FileInputStream input = new FileInputStream("C:\\SomeDir\\notes3.txt");
-        while(input.available()>0)
-        {
+        /*
+        while (input.available() > 0) {
             // читаем посимвольно
             Edge e;
-            e.v1.v=input.read();
-            e.v2.v=input.read();
-            e.weight=input.read();
+            e.v1.v = input.read();
+            e.v2.v = input.read();
+            e.weight = input.read();
         }
-
-
+        */
+        return new JPanel();
     }
 }
