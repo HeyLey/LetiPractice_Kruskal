@@ -1,5 +1,6 @@
 package ru.kruskal.ui;
 
+import ru.kruskal.model.Edge;
 import ru.kruskal.model.Graph;
 
 import javax.swing.*;
@@ -34,10 +35,22 @@ public class VisualizationPanel extends JPanel {
 
 
         for (int e = 0; e < graph.edgesNumber; e++) {
-            Point p1 = getVertexPoint(graph.edges.get(e).v1);
-            Point p2 = getVertexPoint(graph.edges.get(e).v2);
+            Edge edge = graph.edges.get(e);
+            Point p1 = getVertexPoint(edge.v1);
+            Point p2 = getVertexPoint(edge.v2);
             g.setColor(Color.BLACK);
             g.drawLine(p1.x, p1.y, p2.x, p2.y);
+
+            int x = (p1.x * 3 + p2.x * 2) / 5;
+            int y = (p1.y * 3 + p2.y * 2) / 5;
+
+            g.setColor(Color.WHITE);
+            g.fillOval(x - 15, y - 15, 30, 30);
+
+            g.setColor(Color.BLACK);
+            g.drawOval(x - 15, y - 15, 30, 30);
+
+            drawStringInCenter(g, Integer.toString(edge.weight), x, y, 10);
         }
 
         for (int v = 1; v <= graph.vertexNumber; v++) {
@@ -46,7 +59,7 @@ public class VisualizationPanel extends JPanel {
             g.fillOval(p.x - BOX_SIZE / 2, p.y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE);
             g.setColor(Color.BLACK);
             g.drawOval(p.x - BOX_SIZE / 2, p.y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE);
-            drawStringInCenter(g, Integer.toString(v), p.x, p.y);
+            drawStringInCenter(g, Integer.toString(v), p.x, p.y, 16);
         }
     }
 
@@ -63,11 +76,11 @@ public class VisualizationPanel extends JPanel {
 
     private void drawStringInBox(Graphics g, String text, int x, int y, int width, int height) {
         g.drawRect(x, y, width, height);
-        drawStringInCenter(g, text, x + width / 2, y + height / 2);
+        drawStringInCenter(g, text, x + width / 2, y + height / 2, 16);
     }
 
-    private void drawStringInCenter(Graphics g, String text, int x, int y) {
-        Font font = new Font("Default", Font.PLAIN, 16);
+    private void drawStringInCenter(Graphics g, String text, int x, int y, int size) {
+        Font font = new Font("Default", Font.PLAIN, size);
         g.setFont(font);
         FontMetrics metrics = g.getFontMetrics(font);
 
