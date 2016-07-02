@@ -1,5 +1,6 @@
 package ru.kruskal.ui;
 
+import ru.kruskal.algorithm.Kruscal;
 import ru.kruskal.model.Edge;
 import ru.kruskal.model.Graph;
 
@@ -7,11 +8,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class VisualizationPanel extends JPanel {
-    Graph graph;
+    private final Kruscal kruskal;
+    private final Graph graph;
     int BOX_SIZE = 50;
 
-    public VisualizationPanel(Graph graph) {
+    public VisualizationPanel(Graph graph, Kruscal kruscal) {
         this.graph = graph;
+        this.kruskal = kruscal;
         setPreferredSize(new Dimension(640, 680));
     }
 
@@ -28,6 +31,13 @@ public class VisualizationPanel extends JPanel {
         drawStringInBox(g, "weight", 10, 110, 70, 50);
 
         for (int i = 0; i < graph.edges.size(); i++) {
+            if (i == kruskal.edgeIndex) {
+                if (kruskal.state != Kruscal.State.INITIAL) {
+                    g.setColor(new Color(100, 100, 255));
+                    g.fillRect(80 + i * BOX_SIZE, 10, BOX_SIZE, BOX_SIZE * 3);
+                }
+            }
+            g.setColor(Color.BLACK);
             drawValueInBox(g, 80 + i * BOX_SIZE, 10, graph.edges.get(i).v1+1);
             drawValueInBox(g, 80 + i * BOX_SIZE, 10 + BOX_SIZE, graph.edges.get(i).v2+1);
             drawValueInBox(g, 80 + i * BOX_SIZE, 10 + 2 * BOX_SIZE, graph.edges.get(i).weight);
@@ -38,7 +48,19 @@ public class VisualizationPanel extends JPanel {
             Edge edge = graph.edges.get(e);
             Point p1 = getVertexPoint(edge.v1);
             Point p2 = getVertexPoint(edge.v2);
-            g.setColor(Color.BLACK);
+
+            Color color = Color.BLACK;
+            if (kruskal.state == Kruscal.State.CHECK_EDGE) {
+                if (e == kruskal.edgeIndex) {
+                    color = Color.BLUE;
+                }
+            }
+            if (kruskal.ans.hasEdge(edge.v1, edge.v2)) {
+                color = Color.GREEN;
+            }
+            g.setColor(color);
+
+
             g.drawLine(p1.x, p1.y, p2.x, p2.y);
 
             int x = (p1.x * 3 + p2.x * 2) / 5;
@@ -47,7 +69,7 @@ public class VisualizationPanel extends JPanel {
             g.setColor(Color.WHITE);
             g.fillOval(x - 15, y - 15, 30, 30);
 
-            g.setColor(Color.BLACK);
+            g.setColor(color);
             g.drawOval(x - 15, y - 15, 30, 30);
 
             drawStringInCenter(g, Integer.toString(edge.weight), x, y, 10);

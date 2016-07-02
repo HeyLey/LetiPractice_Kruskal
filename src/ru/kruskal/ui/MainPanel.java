@@ -2,6 +2,7 @@ package ru.kruskal.ui;
 
 import java.io.*;
 
+import ru.kruskal.algorithm.Kruscal;
 import ru.kruskal.model.Edge;
 import ru.kruskal.model.Graph;
 
@@ -15,6 +16,7 @@ import java.util.Random;
  */
 public class MainPanel extends JPanel {
     private Graph graph;
+    private Kruscal kruscal;
 
 
     public MainPanel() {
@@ -92,17 +94,23 @@ public class MainPanel extends JPanel {
     }
 
     private void makeVisualization() {
-        add(new VisualizationPanel(graph));
+        kruscal = new Kruscal(graph);
+        add(new VisualizationPanel(graph, kruscal));
         JButton nextButton = new JButton(new AbstractAction("Next") {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                doStep();
             }
         });
         JPanel next = new JPanel(new FlowLayout());
         next.add(nextButton);
         add(next, BorderLayout.SOUTH);
         doPack();
+        repaint();
+    }
+
+    private void doStep() {
+        kruscal.doStep();
         repaint();
     }
 
