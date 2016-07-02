@@ -8,7 +8,7 @@ import java.util.Collections;
  */
 
 public class Graph {
-    int vertexNumber;
+    public int vertexNumber;
     public int edgesNumber;
 
     public List<Edge> edges;
@@ -23,4 +23,16 @@ public class Graph {
         edges.add(e);
     }
     public void sorting(){ Collections.sort(edges);}
+
+    public boolean hasEdge(int from, int to) {
+        for (Edge e : edges) {
+            if (from == e.v1 && to == e.v2) {
+                return true;
+            }
+            if (from == e.v2 && to == e.v1) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

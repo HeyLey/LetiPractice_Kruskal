@@ -2,7 +2,6 @@ package ru.kruskal.algorithm;
 
 import ru.kruskal.model.Edge;
 import ru.kruskal.model.Graph;
-import ru.kruskal.model.Vertex;
 
 import java.util.List;
 
@@ -28,15 +27,15 @@ public class Kruscal {
         return x == set[x] ? x : (set[x] = set(set[x]));
     }
 
-    boolean union(Vertex u, Vertex v){
-        if ( (u.v=set(u.v)) == (v.v=set(v.v)) )
+    boolean union(int u, int v){
+        if ( (u=set(u)) == (v=set(v)) )
             return false;
-        if (rnk[u.v] < rnk[v.v])
-            set[u.v] = v.v;
+        if (rnk[u] < rnk[v])
+            set[u] = v;
         else{
-            set[v.v]=u.v;
-            if (rnk[u.v]==rnk[v.v])
-                rnk[u.v]++;
+            set[v]=u;
+            if (rnk[u]==rnk[v])
+                rnk[u]++;
         }
         return true;
     }

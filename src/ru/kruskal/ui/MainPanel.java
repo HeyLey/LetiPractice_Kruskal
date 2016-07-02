@@ -2,11 +2,13 @@ package ru.kruskal.ui;
 
 import java.io.*;
 
+import ru.kruskal.model.Edge;
 import ru.kruskal.model.Graph;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Random;
 
 /**
  * @author LeylaH
@@ -24,10 +26,10 @@ public class MainPanel extends JPanel {
         JPanel panel = new JPanel(new FlowLayout());
         JPanel grid = new JPanel(new GridLayout(2, 2));
         panel.add(grid);
-        JTextField vertexField = new JTextField("5");
+        JTextField vertexField = new JTextField("6");
         grid.add(vertexField);
         grid.add(new JLabel("# vertex (max 10)"));
-        JTextField edgesField = new JTextField("5");
+        JTextField edgesField = new JTextField("10");
         grid.add(edgesField);
         grid.add(new JLabel("# edges (max 30)"));
 
@@ -56,10 +58,37 @@ public class MainPanel extends JPanel {
         if (!makeGraph(vertexField, edgesField)) {
             return;
         }
+        Random random = new Random();
+        for (int i = 0; i < 1000; i++) {
+            for (int j = 0; j < graph.edgesNumber; j++) {
+                for (int k = 0; k < 1000; k++) {
+                    Edge e = randomEdge(random);
+                    if (e != null) {
+                        graph.edges.add(e);
+                        break;
+                    }
+                }
+
+            }
+            break;
+        }
         removeAll();
 
         makeVisualization();
 
+    }
+
+    private Edge randomEdge(Random random) {
+        int from = random.nextInt(graph.vertexNumber);
+        int to = random.nextInt(graph.vertexNumber);
+        if (from == to) {
+            return null;
+        }
+        if (graph.hasEdge(from, to)) {
+            return null;
+        }
+        int weight = random.nextInt(100);
+        return new Edge(from, to, weight);
     }
 
     private void makeVisualization() {
