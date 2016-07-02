@@ -49,6 +49,8 @@ public class VisualizationPanel extends JPanel {
             Point p1 = getVertexPoint(edge.v1);
             Point p2 = getVertexPoint(edge.v2);
 
+            ((Graphics2D)g).setStroke(new BasicStroke(3));
+
             Color color = Color.BLACK;
             if (kruskal.state == Kruscal.State.CHECK_EDGE) {
                 if (e == kruskal.edgeIndex) {
