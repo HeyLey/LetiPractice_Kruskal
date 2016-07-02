@@ -11,7 +11,7 @@ public class VisualizationPanel extends JPanel {
 
     public VisualizationPanel(Graph graph) {
         this.graph = graph;
-        setPreferredSize(new Dimension(640, 480));
+        setPreferredSize(new Dimension(640, 680));
     }
 
 
@@ -27,10 +27,33 @@ public class VisualizationPanel extends JPanel {
         drawStringInBox(g, "weight", 10, 110, 70, 50);
 
         for (int i = 0; i < graph.edges.size(); i++) {
-            drawValueInBox(g, 80 + i * BOX_SIZE, 10, graph.edges.get(i).v1);
-            drawValueInBox(g, 80 + i * BOX_SIZE, 10 + BOX_SIZE, graph.edges.get(i).v2);
+            drawValueInBox(g, 80 + i * BOX_SIZE, 10, graph.edges.get(i).v1+1);
+            drawValueInBox(g, 80 + i * BOX_SIZE, 10 + BOX_SIZE, graph.edges.get(i).v2+1);
             drawValueInBox(g, 80 + i * BOX_SIZE, 10 + 2 * BOX_SIZE, graph.edges.get(i).weight);
         }
+
+
+        for (int e = 0; e < graph.edgesNumber; e++) {
+            Point p1 = getVertexPoint(graph.edges.get(e).v1);
+            Point p2 = getVertexPoint(graph.edges.get(e).v2);
+            g.setColor(Color.BLACK);
+            g.drawLine(p1.x, p1.y, p2.x, p2.y);
+        }
+
+        for (int v = 1; v <= graph.vertexNumber; v++) {
+            Point p = getVertexPoint(v);
+            g.setColor(new Color(200, 200, 200));
+            g.fillOval(p.x - BOX_SIZE / 2, p.y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE);
+            g.setColor(Color.BLACK);
+            g.drawOval(p.x - BOX_SIZE / 2, p.y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE);
+            drawStringInCenter(g, Integer.toString(v), p.x, p.y);
+        }
+    }
+
+    private Point getVertexPoint(int v) {
+        int x = (int) (300 + Math.cos(v * 2 * Math.PI / graph.vertexNumber) * 200) - BOX_SIZE / 2;
+        int y = (int) (400 - Math.sin(v * 2 * Math.PI / graph.vertexNumber) * 200);
+        return new Point(x, y);
     }
 
     private void drawValueInBox(Graphics g, int x, int y, int value) {
@@ -40,12 +63,16 @@ public class VisualizationPanel extends JPanel {
 
     private void drawStringInBox(Graphics g, String text, int x, int y, int width, int height) {
         g.drawRect(x, y, width, height);
+        drawStringInCenter(g, text, x + width / 2, y + height / 2);
+    }
+
+    private void drawStringInCenter(Graphics g, String text, int x, int y) {
         Font font = new Font("Default", Font.PLAIN, 16);
         g.setFont(font);
         FontMetrics metrics = g.getFontMetrics(font);
 
         g.drawString(text,
-                x + width / 2 - metrics.stringWidth(text) / 2,
-                y + height / 2 - metrics.getHeight() / 2 + metrics.getAscent());
+                x - metrics.stringWidth(text) / 2,
+                y - metrics.getHeight() / 2 + metrics.getAscent());
     }
 }
