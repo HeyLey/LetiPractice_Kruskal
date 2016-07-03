@@ -201,19 +201,19 @@ public class MainPanel extends JPanel {
 
     private void fromFile() {
         JFileChooser chooser = new JFileChooser();
+
+        chooser.setCurrentDirectory(new File("."));
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Text files", "txt");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        File selectedFile = chooser.getSelectedFile();
+
         try {
-            chooser.setCurrentDirectory(new File("."));
-
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    "Text files", "txt");
-            chooser.setFileFilter(filter);
-            int returnVal = chooser.showOpenDialog(this);
-            if (returnVal != JFileChooser.APPROVE_OPTION) {
-                return;
-            }
-            File selectedFile = chooser.getSelectedFile();
-
-
             Scanner input = new Scanner(selectedFile);
 
             int n = input.nextInt();
@@ -228,9 +228,13 @@ public class MainPanel extends JPanel {
                 graph.addEdge(new Edge(v1, v2, weight));
             }
             makeVisualization();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "File is incorrect.",
+                    "Format error",
+                    JOptionPane.ERROR_MESSAGE);
         }
+
 
     }
 }
