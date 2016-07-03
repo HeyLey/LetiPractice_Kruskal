@@ -174,10 +174,28 @@ public class MainPanel extends JPanel {
                     JOptionPane.ERROR_MESSAGE);
             return false;
         }
+
         if (edgesNumber > 20 || edgesNumber <= 0) {
             JOptionPane.showMessageDialog(this,
                     "Edges number must be > 0 and <= 20.",
                     "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        int maxEdges = vertexNumber * (vertexNumber - 1) / 2;
+        if (edgesNumber > maxEdges) {
+            JOptionPane.showMessageDialog(this,
+                    "Too many edges for " + vertexNumber + " vertexes.",
+                    "Try again",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        int minEdges = vertexNumber - 1;
+        if (edgesNumber < minEdges) {
+            JOptionPane.showMessageDialog(this,
+                    "Too few edges for " + vertexNumber + " vertexes.",
+                    "Try again",
                     JOptionPane.ERROR_MESSAGE);
             return false;
         }
