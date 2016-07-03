@@ -28,6 +28,9 @@ public class VisualizationPanel extends JPanel {
             drawTable(g);
         } else {
             g.setColor(Color.BLACK);
+            Font font = new Font("Default", Font.PLAIN, 24);
+            g.setFont(font);
+            drawStringInCenter(g, "Result: " + kruskal.sum, getWidth() / 2, 100, 24);
         }
 
 
@@ -101,8 +104,8 @@ public class VisualizationPanel extends JPanel {
                 }
             }
             g.setColor(Color.BLACK);
-            drawValueInBox(g, 80 + i * BOX_SIZE, 10, graph.edges.get(i).v1);
-            drawValueInBox(g, 80 + i * BOX_SIZE, 10 + BOX_SIZE, graph.edges.get(i).v2);
+            drawValueInBox(g, 80 + i * BOX_SIZE, 10, graph.edges.get(i).v1+1);
+            drawValueInBox(g, 80 + i * BOX_SIZE, 10 + BOX_SIZE, graph.edges.get(i).v2+1);
             drawValueInBox(g, 80 + i * BOX_SIZE, 10 + 2 * BOX_SIZE, graph.edges.get(i).weight);
         }
     }

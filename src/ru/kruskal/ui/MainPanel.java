@@ -35,17 +35,19 @@ public class MainPanel extends JPanel {
         grid.add(new JLabel("# vertex (max 10)"));
         JTextField edgesField = new JTextField("10");
         grid.add(edgesField);
-        grid.add(new JLabel("# edges (max 30)"));
+        grid.add(new JLabel("# edges (max 20)"));
 
 
         JPanel next = new JPanel(new FlowLayout());
         add(next, BorderLayout.SOUTH);
+        /*
         next.add(new JButton(new AbstractAction("Next") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 submit1(vertexField, edgesField);
             }
         }));
+*/
 
         next.add(new JButton(new AbstractAction("Read file") {
             @Override
@@ -172,9 +174,9 @@ public class MainPanel extends JPanel {
                     JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        if (edgesNumber > 30 || edgesNumber <= 0) {
+        if (edgesNumber > 20 || edgesNumber <= 0) {
             JOptionPane.showMessageDialog(this,
-                    "Edges number must be > 0 and <= 10.",
+                    "Edges number must be > 0 and <= 20.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
             return false;
