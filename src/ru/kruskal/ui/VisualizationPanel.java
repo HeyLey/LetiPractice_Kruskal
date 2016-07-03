@@ -24,19 +24,9 @@ public class VisualizationPanel extends JPanel {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        g.setColor(Color.BLACK);
-
-        drawStringInBox(g, "v1", 10, 10, 70, 50);
-        drawStringInBox(g, "v2", 10, 60, 70, 50);
-        drawStringInBox(g, "weight", 10, 110, 70, 50);
-
-        for (int i = 0; i < graph.edges.size(); i++) {
-            if (i == kruskal.edgeIndex) {
-                if (kruskal.state != Kruscal.State.INITIAL) {
-                    g.setColor(new Color(100, 100, 255));
-                    g.fillRect(80 + i * BOX_SIZE, 10, BOX_SIZE, BOX_SIZE * 3);
-                }
-            }
+        if (kruskal.state != Kruscal.State.END) {
+            drawTable(g);
+        } else {
             g.setColor(Color.BLACK);
             drawValueInBox(g, 80 + i * BOX_SIZE, 10, graph.edges.get(i).v1);
             drawValueInBox(g, 80 + i * BOX_SIZE, 10 + BOX_SIZE, graph.edges.get(i).v2);
@@ -51,14 +41,22 @@ public class VisualizationPanel extends JPanel {
 
             ((Graphics2D)g).setStroke(new BasicStroke(3));
 
-            Color color = Color.BLACK;
-            if (kruskal.state == Kruscal.State.CHECK_EDGE) {
-                if (e == kruskal.edgeIndex) {
-                    color = Color.BLUE;
-                }
-            }
+            Color color = Color.GRAY;
+
             if (kruskal.ans.hasEdge(edge.v1, edge.v2)) {
-                color = Color.GREEN;
+                color = new Color(10, 155, 10);
+            } else if (kruskal.state == Kruscal.State.END) {
+                continue;
+            }
+
+            if (e == kruskal.edgeIndex) {
+                if (kruskal.state == Kruscal.State.CHECK_EDGE) {
+                    color = Color.BLUE;
+                } else if (kruskal.state == Kruscal.State.COLLISION) {
+                    color = Color.RED;
+                } else if (kruskal.state == Kruscal.State.ADD_EDGE) {
+                    color = Color.GREEN;
+                }
             }
             g.setColor(color);
 
@@ -71,11 +69,15 @@ public class VisualizationPanel extends JPanel {
             g.setColor(Color.WHITE);
             g.fillOval(x - 15, y - 15, 30, 30);
 
+            ((Graphics2D)g).setStroke(new BasicStroke(1));
+
             g.setColor(color);
             g.drawOval(x - 15, y - 15, 30, 30);
 
             drawStringInCenter(g, Integer.toString(edge.weight), x, y, 10);
         }
+
+        ((Graphics2D)g).setStroke(new BasicStroke(2));
 
         for (int v = 1; v <= graph.vertexNumber; v++) {
             Point p = getVertexPoint(v);
@@ -84,6 +86,27 @@ public class VisualizationPanel extends JPanel {
             g.setColor(Color.BLACK);
             g.drawOval(p.x - BOX_SIZE / 2, p.y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE);
             drawStringInCenter(g, Integer.toString(v), p.x, p.y, 16);
+        }
+    }
+
+    private void drawTable(Graphics g) {
+        g.setColor(Color.BLACK);
+
+        drawStringInBox(g, "v1", 10, 10, 70, 50);
+        drawStringInBox(g, "v2", 10, 60, 70, 50);
+        drawStringInBox(g, "weight", 10, 110, 70, 50);
+
+        for (int i = 0; i < graph.edges.size(); i++) {
+            if (i == kruskal.edgeIndex) {
+                if (kruskal.state != Kruscal.State.INITIAL) {
+                    g.setColor(new Color(150, 150, 255));
+                    g.fillRect(80 + i * BOX_SIZE, 10, BOX_SIZE, BOX_SIZE * 3);
+                }
+            }
+            g.setColor(Color.BLACK);
+            drawValueInBox(g, 80 + i * BOX_SIZE, 10, graph.edges.get(i).v1+1);
+            drawValueInBox(g, 80 + i * BOX_SIZE, 10 + BOX_SIZE, graph.edges.get(i).v2+1);
+            drawValueInBox(g, 80 + i * BOX_SIZE, 10 + 2 * BOX_SIZE, graph.edges.get(i).weight);
         }
     }
 

@@ -19,7 +19,7 @@ public class Graph {
         edges = new ArrayList<>(e);
     }
 
-    void addEdge(Edge e) {
+    public void addEdge(Edge e) {
         edges.add(e);
     }
     public void sorting(){ Collections.sort(edges);}

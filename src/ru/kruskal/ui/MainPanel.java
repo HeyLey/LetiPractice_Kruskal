@@ -7,9 +7,11 @@ import ru.kruskal.model.Edge;
 import ru.kruskal.model.Graph;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * @author LeylaH
@@ -38,20 +40,26 @@ public class MainPanel extends JPanel {
 
         JPanel next = new JPanel(new FlowLayout());
         add(next, BorderLayout.SOUTH);
-        JButton nextButton = new JButton(new AbstractAction("Next") {
+        next.add(new JButton(new AbstractAction("Next") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 submit1(vertexField, edgesField);
             }
-        });
-        next.add(nextButton);
-        JButton makeRandom = new JButton(new AbstractAction("Random") {
+        }));
+
+        next.add(new JButton(new AbstractAction("Read file") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fromFile();
+            }
+        }));
+
+        next.add(new JButton(new AbstractAction("Random") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 makeRandom(vertexField, edgesField);
             }
-        });
-        next.add(makeRandom);
+        }));
 
         return panel;
     }
@@ -61,23 +69,18 @@ public class MainPanel extends JPanel {
             return;
         }
         Random random = new Random();
-        for (int i = 0; i < 1000; i++) {
-            for (int j = 0; j < graph.edgesNumber; j++) {
-                for (int k = 0; k < 1000; k++) {
-                    Edge e = randomEdge(random);
-                    if (e != null) {
-                        graph.edges.add(e);
-                        break;
-                    }
+
+        for (int j = 0; j < graph.edgesNumber; j++) {
+            for (int k = 0; k < 1000; k++) {
+                Edge e = randomEdge(random);
+                if (e != null) {
+                    graph.edges.add(e);
+                    break;
                 }
-
             }
-            break;
+
         }
-        removeAll();
-
         makeVisualization();
-
     }
 
     private Edge randomEdge(Random random) {
@@ -94,14 +97,15 @@ public class MainPanel extends JPanel {
     }
 
     private void makeVisualization() {
-        kruscal = new Kruscal(graph);
-        add(new VisualizationPanel(graph, kruscal));
+        removeAll();
         JButton nextButton = new JButton(new AbstractAction("Next") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 doStep();
             }
         });
+        kruscal = new Kruscal(graph, nextButton);
+        add(new VisualizationPanel(graph, kruscal));
         JPanel next = new JPanel(new FlowLayout());
         next.add(nextButton);
         add(next, BorderLayout.SOUTH);
@@ -193,17 +197,38 @@ public class MainPanel extends JPanel {
         return panel;
     }
 
-    private JPanel fromFile() throws IOException {
-        FileInputStream input = new FileInputStream("C:\\SomeDir\\notes3.txt");
-        /*
-        while (input.available() > 0) {
-            // читаем посимвольно
-            Edge e;
-            e.v1.v = input.read();
-            e.v2.v = input.read();
-            e.weight = input.read();
+    private void fromFile() {
+        JFileChooser chooser = new JFileChooser();
+        try {
+            chooser.setCurrentDirectory(new File("."));
+
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "Text files", "txt");
+            chooser.setFileFilter(filter);
+            int returnVal = chooser.showOpenDialog(this);
+            if (returnVal != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+            File selectedFile = chooser.getSelectedFile();
+
+
+            Scanner input = new Scanner(selectedFile);
+
+            int n = input.nextInt();
+            int m = input.nextInt();
+
+            graph = new Graph(n, m);
+
+            for (int i = 0; i < m; i++) {
+                int v1 = input.nextInt() - 1;
+                int v2 = input.nextInt() - 1;
+                int weight = input.nextInt();
+                graph.addEdge(new Edge(v1, v2, weight));
+            }
+            makeVisualization();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        */
-        return new JPanel();
+
     }
 }

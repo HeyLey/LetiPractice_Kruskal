@@ -3,12 +3,14 @@ package ru.kruskal.algorithm;
 import ru.kruskal.model.Edge;
 import ru.kruskal.model.Graph;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
  *
  */
 public class Kruscal {
+    private final JButton button;
     public State state = State.INITIAL;
     int[] set; //номер множества
     int[] rnk; //ранг
@@ -16,14 +18,15 @@ public class Kruscal {
     Graph gr; //исходный граф
     public Graph ans; //минимальное остовное дерево
     public int edgeIndex = 0;
-    int sum = 0;
+    public int sum = 0;
 
-    public Kruscal(Graph graph) {
+    public Kruscal(Graph graph, JButton nextButton) {
         int size = graph.vertexNumber;
         gr = graph;
         ans = new Graph(graph.vertexNumber, graph.edgesNumber);
         set = new int[size];
         rnk = new int[size];
+        button = nextButton;
         for (int i = 0; i < size; i++) {
             set[i] = i;
         }
@@ -69,20 +72,26 @@ public class Kruscal {
             gr.sorting();
             state = State.SORTED;
         } else if (state == State.CHECK_EDGE) {
-            state = State.ADD_EDGE;
-
             Edge e = gr.edges.get(edgeIndex);
 
             if (this.union(e.v1, e.v2)) {
                 sum += e.weight;
+                state = State.ADD_EDGE;
                 ans.edges.add(e);
+            } else {
+                state = State.COLLISION;
             }
-
+        } else if (state == State.ADD_EDGE || state == State.COLLISION) {
             edgeIndex++;
-        } else {
+            if (edgeIndex < gr.edgesNumber) {
+                state = State.CHECK_EDGE;
+            } else {
+                state = State.END;
+                button.setEnabled(false);
+            }
+        } else if (state == State.SORTED){
             state = State.CHECK_EDGE;
         }
-
     }
 
     public enum State {
@@ -90,6 +99,7 @@ public class Kruscal {
         SORTED,
         CHECK_EDGE,
         ADD_EDGE,
-        State, COLLISION
+        COLLISION,
+        END
     }
 }
