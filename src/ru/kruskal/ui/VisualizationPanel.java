@@ -80,7 +80,7 @@ public class VisualizationPanel extends JPanel {
         ((Graphics2D)g).setStroke(new BasicStroke(2));
 
         for (int v = 1; v <= graph.vertexNumber; v++) {
-            Point p = getVertexPoint(v);
+            Point p = getVertexPoint(v - 1);
             g.setColor(new Color(200, 200, 200));
             g.fillOval(p.x - BOX_SIZE / 2, p.y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE);
             g.setColor(Color.BLACK);
