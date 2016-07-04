@@ -120,27 +120,6 @@ public class MainPanel extends JPanel {
         repaint();
     }
 
-    private void submit1(JTextField vertexField, JTextField edgesField) {
-        if (!makeGraph(vertexField, edgesField)) {
-            return;
-        }
-        removeAll();
-
-        add(createEdgesPanel());
-
-        JButton nextButton = new JButton(new AbstractAction("Next") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        JPanel next = new JPanel(new FlowLayout());
-        next.add(nextButton);
-        add(next, BorderLayout.SOUTH);
-
-        doPack();
-    }
-
     private void doPack() {
         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         topFrame.pack();
@@ -203,20 +182,6 @@ public class MainPanel extends JPanel {
         return true;
     }
 
-    private JPanel createEdgesPanel() {
-        JPanel panel = new JPanel(new GridLayout(graph.edgesNumber + 1, 3));
-
-        panel.add(new JLabel("from"));
-        panel.add(new JLabel("to"));
-        panel.add(new JLabel("weight"));
-        for (int i = 0; i < graph.edgesNumber; i++) {
-            for (int j = 0; j < 3; j++) {
-                panel.add(new JTextField());
-            }
-        }
-        return panel;
-    }
-
     private void fromFile() {
         JFileChooser chooser = new JFileChooser();
 
@@ -252,7 +217,6 @@ public class MainPanel extends JPanel {
                     "Format error",
                     JOptionPane.ERROR_MESSAGE);
         }
-
 
     }
 }
