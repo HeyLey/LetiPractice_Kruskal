@@ -6,10 +6,9 @@ import ru.kruskal.model.Graph;
 import javax.swing.*;
 import java.util.List;
 
-/**
- *
- */
+
 public class Kruscal {
+
     private final JButton button;
     public State state = State.INITIAL;
     int[] set; //номер множества
@@ -48,23 +47,6 @@ public class Kruscal {
                 rnk[u]++;
         }
         return true;
-    }
-
-    public void kr() {
-        gr.sorting(); //сортируем ребра
-
-        //Edge [] edges;
-
-
-
-        for (Edge e : gr.edges) {
-            if (this.union(e.v1, e.v2)) {
-                sum += e.weight;
-                ans.edges.add(e);
-            }
-        }
-
-
     }
 
     public void doStep() {
