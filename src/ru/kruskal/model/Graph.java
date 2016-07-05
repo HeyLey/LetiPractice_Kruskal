@@ -22,7 +22,10 @@ public class Graph {
     public void addEdge(Edge e) {
         edges.add(e);
     }
-    public void sorting(){ Collections.sort(edges);}
+
+    public void sorting(){
+        Collections.sort(edges);
+    }
 
     public boolean hasEdge(int from, int to) {
         for (Edge e : edges) {
